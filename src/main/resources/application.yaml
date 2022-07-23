@@ -1,0 +1,43 @@
+server:
+  port: 8081
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+transacao:
+  queue:
+    name: q.centralbank.notificacaotransacao
+    error: q.centralbank.notificacaotransacao.err
+    wait: q.centralbank.notificacaotransacao.wait
+  exchange:
+    name: x.centralbank.notificacaotransacao
+    error: x.centralbank.notificacaotransacao.err
+    wait: x.centralbank.notificacaotransacao.wait
+    events:
+      aprovadas: x.saga.transacoes.aprovadas
+      reprovadas: x.saga.transacoes.reprovadas
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://mongoadmin:mongoadmin@localhost:27017
+      database: centralbank
+  rabbitmq:
+    listener:
+      simple:
+        retry:
+          max-interval: 60s
+          multiplier: 3
+          max-attempts: 3
+          initial-interval: 6s
+  kafka:
+    bootstrap-servers: localhost:9092
+    group_id: transferencias
+    auto-offset-reset: earliest
+topico:
+  transferencia:
+    solicitada: transferencia_solicitada
+    sucesso: transferencia_sucesso
+    recebida: transferencia_recebida
+    recusada: transferencia_recusadas
