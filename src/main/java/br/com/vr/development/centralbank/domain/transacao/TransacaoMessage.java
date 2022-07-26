@@ -2,7 +2,10 @@ package br.com.vr.development.centralbank.domain.transacao;
 
 
 import br.com.vr.development.centralbank.commum.dto.TransacaoMessageDTO;
+import br.com.vr.development.centralbank.domain.transferencia.ITransferenciaVisitor;
 import br.com.vr.development.centralbank.enums.TipoTransferencia;
+import br.com.vr.development.centralbank.inbound.dto.events.TransferenciaAprovadaEvent;
+import br.com.vr.development.centralbank.inbound.dto.events.TransferenciaReprovadaEvent;
 import lombok.*;
 
 import java.util.UUID;
@@ -19,4 +22,19 @@ public class TransacaoMessage {
     private TransacaoMessageDTO.ContaDestino contaDestino;
     private TipoTransferencia tipoTransferencia;
 
+    public boolean valorEhMenorOuIgualAZero() {
+        return valor.ehMenorOuIgualAZero();
+    }
+
+    public TransacaoMessageDTO toDTO() {
+        return new TransacaoMessageDTO(this);
+    }
+
+    public ITransferenciaVisitor buildEvent() {
+        if (this.valorEhMenorOuIgualAZero()) {
+            return new TransferenciaReprovadaEvent(correlationId, toDTO());
+        }
+
+        return new TransferenciaAprovadaEvent(correlationId, toDTO());
+    }
 }

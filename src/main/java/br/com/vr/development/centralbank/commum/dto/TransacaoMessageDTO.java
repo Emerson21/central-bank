@@ -1,9 +1,10 @@
 package br.com.vr.development.centralbank.commum.dto;
 
+import br.com.vr.development.centralbank.domain.transacao.TransacaoMessage;
+import br.com.vr.development.centralbank.enums.TipoTransferencia;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,6 +14,9 @@ import java.util.UUID;
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Document("transacao_messages")
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
+@EqualsAndHashCode
 public class TransacaoMessageDTO {
 
     @Id
@@ -23,6 +27,25 @@ public class TransacaoMessageDTO {
     private ContaOrigem contaOrigem;
     private ContaDestino contaDestino;
     private String tipoTransferencia;
+
+    public TransacaoMessageDTO(TransacaoMessage transacaoMessage) {
+        this.correlationId = transacaoMessage.getCorrelationId();
+        this.valor = transacaoMessage.getValor();
+        this.contaDestino = transacaoMessage.getContaDestino();
+        this.contaOrigem = transacaoMessage.getContaOrigem();
+        this.tipoTransferencia = transacaoMessage.getTipoTransferencia().name();
+    }
+
+    @JsonIgnore
+    public TransacaoMessage toModel() {
+        return new TransacaoMessage(
+                correlationId,
+                valor,
+                contaOrigem,
+                contaDestino,
+                TipoTransferencia.valueOf(tipoTransferencia)
+        );
+    }
 
     @Getter
     @Setter
@@ -36,6 +59,8 @@ public class TransacaoMessageDTO {
     @Getter
     @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Banco {
         private NomeFantasia nomeFantasia;
         private String codigo;
@@ -44,18 +69,22 @@ public class TransacaoMessageDTO {
     @Getter
     @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class ContaDestino {
         private Banco banco;
         private AgenciaBancaria agenciaBancaria;
         private int numero;
         private int digito;
-        private Object nomeCorrentista;
+        private String nomeCorrentista;
         private Cpf cpf;
     }
 
     @Getter
     @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class ContaOrigem {
         private NomeFantasia nomeFantasia;
         private String codigoBanco;
@@ -65,15 +94,18 @@ public class TransacaoMessageDTO {
     @Getter
     @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Cpf {
         private String numero;
-        private boolean valido;
         private String tipoDocumento;
     }
 
     @Getter
     @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class NomeFantasia {
         private String nome;
     }
@@ -81,10 +113,12 @@ public class TransacaoMessageDTO {
     @Getter
     @Setter
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @AllArgsConstructor
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     public static class Valor {
         private BigDecimal value;
 
-        public boolean forMenorOuIgualAZero() {
+        public boolean ehMenorOuIgualAZero() {
             return value.compareTo(BigDecimal.ZERO) <= 0;
         }
     }

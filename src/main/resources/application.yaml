@@ -21,7 +21,8 @@ transacao:
 spring:
   data:
     mongodb:
-      uri: mongodb://mongoadmin:mongoadmin@localhost:27017
+#      uri: mongodb://mongoadmin:mongoadmin@localhost:27017
+      uri: mongodb://admin:admin@localhost:27017
       database: centralbank
   rabbitmq:
     listener:
@@ -33,11 +34,11 @@ spring:
           initial-interval: 6s
   kafka:
     bootstrap-servers: localhost:9092
-    group_id: transferencias
+    group_id: central-bank
     auto-offset-reset: earliest
 topico:
   transferencia:
     solicitada: transferencia_solicitada
-    sucesso: transferencia_sucesso
+    aprovada: transferencia_aprovada
     recebida: transferencia_recebida
-    recusada: transferencia_recusadas
+    reprovada: transferencia_reprovada

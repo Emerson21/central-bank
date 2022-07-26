@@ -3,26 +3,22 @@ package br.com.vr.development.centralbank.inbound.dto.events;
 import br.com.vr.development.centralbank.commum.dto.TransacaoMessageDTO;
 import br.com.vr.development.centralbank.domain.transferencia.ITransferenciaVisitor;
 import br.com.vr.development.centralbank.domain.transferencia.TransferenciaVisitor;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.UUID;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString
-@Getter
-public class TransferenciaSolicitadaEvent extends TransferenciaEvent {
+public class TransferenciaReprovadaEvent extends TransferenciaEvent implements ITransferenciaVisitor {
 
-    public TransferenciaSolicitadaEvent(UUID correlationId, TransacaoMessageDTO transacaoMessage) {
+    public TransferenciaReprovadaEvent(UUID correlationId, TransacaoMessageDTO transacaoMessage) {
         super(correlationId, transacaoMessage);
     }
 
     @Override
-    public boolean equals(Object object) {
-        if ( object != null && object instanceof TransferenciaSolicitadaEvent ) {
-            return ((TransferenciaEvent) object).correlationId().equals(correlationId.toString());
-        }
-
-        return false;
+    public void publish(TransferenciaVisitor transferenciaVisitor) {
+        transferenciaVisitor.visit(this);
     }
-
 }

@@ -7,7 +7,6 @@ import br.com.vr.development.centralbank.events.transacoes.TransacaoReprovadaEve
 import br.com.vr.development.centralbank.infrastructure.MessageRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import static java.util.UUID.fromString;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 
 @Slf4j
@@ -59,13 +57,13 @@ public class TransacoesConsumer {
     }
 
     private TopicExchange getTopicEvent(TransacaoMessageDTO transacaoMessageDTO) {
-        return transacaoMessageDTO.getValor().forMenorOuIgualAZero()
+        return transacaoMessageDTO.getValor().ehMenorOuIgualAZero()
                 ? transacoesReprovadas
                 : transacoesAprovadas;
     }
 
     private Event buildTipoDeEvento(TransacaoMessageDTO transacaoMessageDTO) {
-        return transacaoMessageDTO.getValor().forMenorOuIgualAZero()
+        return transacaoMessageDTO.getValor().ehMenorOuIgualAZero()
                 ? new TransacaoReprovadaEvent(transacaoMessageDTO)
                 : new TransacaoAprovadaEvent(transacaoMessageDTO);
     }

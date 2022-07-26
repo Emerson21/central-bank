@@ -42,13 +42,15 @@ public class KafkaConfig {
 
     @Bean
     ProducerFactory<String, TransferenciaEvent> producerFactory() {
-        Map<String, Object> props = new HashMap<>() {{
+        return new DefaultKafkaProducerFactory<>(produtorConfigs());
+    }
+
+    Map<String, Object> produtorConfigs() {
+        return new HashMap<>() {{
             put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServerUrl);
             put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
             put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
         }};
-
-        return new DefaultKafkaProducerFactory<>(props);
     }
 
     @Bean
