@@ -19,10 +19,10 @@ import java.util.UUID;
 public class TransferenciaEvent {
 
     @Id
-    @JsonProperty("correlation_id")
+    @JsonProperty("_id")
     UUID correlationId;
 
-    @JsonProperty("transacaoMessage")
+    @JsonProperty("transacao_message")
     private TransacaoMessageDTO transacaoMessage;
 
     public TransferenciaEvent(UUID correlationId, TransacaoMessageDTO transacaoMessage) {

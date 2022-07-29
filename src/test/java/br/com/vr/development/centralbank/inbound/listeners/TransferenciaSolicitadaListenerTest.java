@@ -11,6 +11,7 @@ import br.com.vr.development.centralbank.inbound.dto.events.TransferenciaRecebid
 import br.com.vr.development.centralbank.inbound.dto.events.TransferenciaSolicitadaEvent;
 import br.com.vr.development.centralbank.inbound.listener.TransferenciaSolicitadaListener;
 import br.com.vr.development.centralbank.infrastructure.TransferenciaMessageRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -59,7 +60,7 @@ public class TransferenciaSolicitadaListenerTest {
     private ArgumentCaptor<TransferenciaSolicitadaEvent> captorTransferenciaSolicitada;
 
     @Test
-    void deveReceberUmEventoDeTransferenciaSolicitada() {
+    void deveReceberUmEventoDeTransferenciaSolicitada() throws JsonProcessingException {
         UUID uuid = UUID.randomUUID();
 
         TransacaoMessageDTO.Banco banco = new TransacaoMessageDTO.Banco(
@@ -102,6 +103,5 @@ public class TransferenciaSolicitadaListenerTest {
         verify(kafkaMessageSender, times(1)).publish(any(TransferenciaRecebidaEvent.class));
         verify(transferenciaService, times(1)).processar(any(TransacaoMessage.class));
     }
-
 
 }

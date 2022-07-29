@@ -20,7 +20,7 @@ public class TransferenciaSolicitadaListener {
     private KafkaTransferenciaMessageSender kafkaMessageSender;
 
     @KafkaListener(
-            topics = "${topico.transferencia.solicitada}",
+            topics = {"${topico.transferencia.solicitada}", "outbox.event.${topico.transferencia.solicitada}"},
             groupId = "${spring.kafka.group_id}",
             containerFactory = "transferenciasSolicitadasKafkaListener"
     )

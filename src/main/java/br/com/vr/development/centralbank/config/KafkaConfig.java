@@ -68,6 +68,7 @@ public class KafkaConfig {
                 new StringDeserializer(),
                 jsonDeserializer(TransferenciaSolicitadaEvent.class));
     }
+
     private <T> JsonDeserializer<T> jsonDeserializer(Class<T> clazz){
         return new JsonDeserializer<T>(clazz, false);
     }
