@@ -40,7 +40,7 @@ public class TransacoesConsumer {
     private TopicExchange transacoesReprovadas;
 
 
-    @RabbitListener(queues = {"${transacao.queue.name}"})
+//    @RabbitListener(queues = {"${transacao.queue.name}"})
     public void receive(String message, @Header(name = "x-death", required = false) Map<?, ?> death) throws JsonProcessingException {
         log.info("Message {}", message);
         ObjectMapper mapper = new ObjectMapper().findAndRegisterModules();

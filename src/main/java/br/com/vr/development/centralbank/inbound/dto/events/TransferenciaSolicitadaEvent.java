@@ -1,8 +1,6 @@
 package br.com.vr.development.centralbank.inbound.dto.events;
 
 import br.com.vr.development.centralbank.commum.dto.TransacaoMessageDTO;
-import br.com.vr.development.centralbank.domain.transferencia.ITransferenciaVisitor;
-import br.com.vr.development.centralbank.domain.transferencia.TransferenciaVisitor;
 import lombok.*;
 
 import java.util.UUID;
